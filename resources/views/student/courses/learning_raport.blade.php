@@ -141,7 +141,7 @@
                     <div class="flex items-center gap-3">
                         <div class="flex flex-col text-right">
                             <p class="text-sm text-[#7F8190]">Howdy</p>
-                            <p class="font-semibold">Bondan Poro</p>
+                            <p class="font-semibold">{{ Auth::user()->name }}</p>
                         </div>
                         <div class="w-[46px] h-[46px]">
                             <img src="{{ asset('images/photos/default-photo.svg') }}" alt="photo">
@@ -184,28 +184,40 @@
                     </div>
                 </div>
                 <div class="flex items-center">
-                    <p
-                        class="p-[16px_20px] rounded-[10px] bg-[#FD445E] font-bold text-lg text-white outline-[#FD445E] outline-dashed outline-[3px] outline-offset-[7px] mr-[10px]">
-                        Not Passed</p>
-                    <!-- <p class="p-[16px_20px] rounded-[10px] bg-[#06BC65] font-bold text-lg text-white outline-[#06BC65] outline-dashed outline-[3px] outline-offset-[7px] mr-[10px]">Passed</p> -->
+                    @if ($passed)
+                        <p
+                            class="p-[16px_20px] rounded-[10px] bg-[#06BC65] font-bold text-lg text-white outline-[#06BC65] outline-dashed outline-[3px] outline-offset-[7px] mr-[10px]">
+                            Passed</p>
+                    @else
+                        <p
+                            class="p-[16px_20px] rounded-[10px] bg-[#FD445E] font-bold text-lg text-white outline-[#FD445E] outline-dashed outline-[3px] outline-offset-[7px] mr-[10px]">
+                            Not Passed</p>
+                    @endif
                 </div>
             </div>
             <div class="result flex flex-col gap-5 mx-[70px] w-[870px] mt-[30px]">
-                {{-- @forelse ($studentAnswers as $answer)
+                @forelse ($studentAnswers as $answer)
                     <div
                         class="question-card w-full flex items-center justify-between p-4 border border-[#EEEEEE] rounded-[20px]">
                         <div class="flex flex-col gap-[6px]">
                             <p class="text-[#7F8190]">Questions</p>
-                            <p class="text-xl font-bold">{{ $answer }}</p>
+                            <p class="text-xl font-bold">{{ $answer->question->question }}</p>
                         </div>
                         <div class="flex items-center gap-[14px]">
-                            <p class="bg-[#06BC65] rounded-full p-[8px_20px] text-white font-semibold text-sm">Success
-                            </p>
+                            @if ($answer->answer == 'wrong')
+                                <p class="bg-[#FD445E] rounded-full p-[8px_20px] text-white font-semibold text-sm">
+                                    {{ $answer->answer }}
+                                </p>
+                            @else
+                                <p class="bg-[#06BC65] rounded-full p-[8px_20px] text-white font-semibold text-sm">
+                                    {{ $answer->answer }}
+                                </p>
+                            @endif
                         </div>
                     </div>
                 @empty
                     <p>No Answer</p>
-                @endforelse --}}
+                @endforelse
             </div>
             <div class="options flex items-center mx-[70px] gap-5 mt-[30px]">
                 <a href=""

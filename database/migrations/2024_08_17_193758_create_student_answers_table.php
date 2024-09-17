@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\CourseAnswer;
+use App\Models\CourseQuestion;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('answer');
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(CourseAnswer::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(CourseQuestion::class)->constrained()->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

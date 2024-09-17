@@ -77,13 +77,13 @@ class StudentAnswerController extends Controller
 
             $nextQuestion = CourseQuestion::where('course_id', $course->id)
                 ->where('id', '>', $question)
-                ->orderBy('id', 'ASC')
+                ->orderBy('id', 'asc')
                 ->first();
 
             if ($nextQuestion) {
-                return redirect()->route('dashboard.learing.course', ['course' => $course->id, 'question' => $nextQuestion->id]);
+                return redirect()->route('dashboard.learning.course', ['course' => $course->id, 'question' => $nextQuestion->id]);
             } else {
-                return redirect()->route('dashboard.learing.finished.course', $course->id);
+                return redirect()->route('dashboard.learning.finished.course', $course->id);
             }
         } catch (\Exception $e) {
             DB::rollBack();

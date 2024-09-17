@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\CourseStudent;
+use App\Models\StudentAnswer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,9 +15,37 @@ class CourseStudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Course $course)
     {
-        //
+        $students = $course->students()->orderBy('id', 'DESC')->get();
+        $questions = $course->questions()->orderBy('id', 'DESC')->get();
+        $totalQuestions = $questions->count();
+
+        foreach ($students as $student) {
+            $studentAnswer = StudentAnswer::whereHas('question', function ($query) use ($course) {
+                $query->where('course_id', $course->id);
+            })
+                ->where('user_id', $student->id)
+                ->get();
+
+            $answerCount = $studentAnswer->count();
+            $correctAnswerCount = $studentAnswer->where('answer', 'correct')
+                ->count();
+
+            if ($answerCount == 0) {
+                $student->status = 'Not Start';
+            } elseif ($correctAnswerCount < $totalQuestions) {
+                $student->status = 'Not Passed';
+            } elseif ($correctAnswerCount == $totalQuestions) {
+                $student->status = 'Passed';
+            }
+        }
+
+        return view('teacher.students.index', [
+            'course' => $course,
+            'questions' => $questions,
+            'students' => $students,
+        ]);
     }
 
     /**
@@ -64,7 +93,7 @@ class CourseStudentController extends Controller
         try {
             $course->students()->attach($user->id);
             DB::commit();
-            return redirect()->route('dashboard.course.course_student.index', $course);
+            return redirect()->route('dashboard.courses.show', $course);
         } catch (\Exception $e) {
             DB::rollBack();
             $error = ValidationException::withMessages([

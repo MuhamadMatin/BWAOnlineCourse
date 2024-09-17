@@ -34,6 +34,17 @@
                 </div>
             </div>
         </div>
+
+        @if ($errors->any())
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li class="bg-red-500">
+                        {{ $error }}
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+
         <form
             action="{{ route('dashboard.learning.course.answer.store', ['course' => $course->id, 'question' => $question->id]) }}"
             method="POST" class="learning flex flex-col gap-[50px] items-center mt-[50px] w-full pb-[30px]">
@@ -57,7 +68,7 @@
                     </label>
                 @endforeach
             </div>
-            <button type="submit" href="learning-finished.html"
+            <button type="submit"
                 class="w-fit p-[14px_40px] bg-[#6436F1] rounded-full font-bold text-sm text-white transition-all duration-300 hover:shadow-[0_4px_15px_0_#6436F14D] text-center align-middle">Save
                 & Next Question</button>
         </form>

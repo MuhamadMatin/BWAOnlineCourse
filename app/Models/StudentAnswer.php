@@ -13,7 +13,7 @@ class StudentAnswer extends Model
     protected $fillable = [
         'user_id',
         'answer',
-        'course_answer_id',
+        'course_question_id',
     ];
 
     protected $guarded = [
